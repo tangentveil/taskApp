@@ -1,21 +1,30 @@
 import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteTask,
-  getTasks,
-  updateTask,
-} from "../../features/Tasks/taskSlice";
+import { clearTaskError, deleteTask, updateTask } from "../../features/Tasks/taskSlice";
 import { openModal } from "../../features/modal/modalSlice.js";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { toast } from "react-toastify";
 
 const Task = ({ _id, title, description, status }) => {
   const dispatch = useDispatch();
-  const loading = useSelector((store) => store.tasks?.isLoading);
+  const {isTaskCompleted, isTaskDeleted} = useSelector((store) => store.tasks);
   const taskId = _id;
 
+  // useEffect(() => {
+  //   // if (isTaskCompleted) {
+  //   //   toast.success("Task Completed");
+  //   // }
+
+  //   if (isTaskDeleted) {
+  //     toast.success("Task Deleted");
+  //   }
+  // }, [isTaskCompleted, isTaskDeleted]);
+
   const handleStatusChange = () => {
+    dispatch(clearTaskError());
+
     const updatedStatus = status === "completed" ? "in progress" : "completed";
     dispatch(
       updateTask({
@@ -88,15 +97,17 @@ const Task = ({ _id, title, description, status }) => {
         <Box>
           {status !== "completed" && (
             <EditNoteIcon
-              onClick={() => dispatch(openModal({_id, title, description }))}
+              onClick={() => dispatch(openModal({ _id, title, description }))}
               sx={{ color: "green", paddingRight: "12px", cursor: "pointer" }}
             />
           )}
 
           <DeleteIcon
-            onClick={() => dispatch(deleteTask(taskId))}
+            onClick={() => {
+              dispatch(deleteTask(taskId))
+              dispatch(clearTaskError());
+            }}
             sx={{ color: "red", cursor: "pointer" }}
-            disabled={loading}
           />
         </Box>
       </Box>

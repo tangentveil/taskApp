@@ -5,6 +5,10 @@ const initialState = {
   tasks: [],
   error: null,
   isLoading: false,
+  isTaskCreating: false,
+  isTaskCreated: false,
+  isTaskCompleted: false,
+  isTaskDeleted: false,
 };
 
 export const getTasks = createAsyncThunk(
@@ -59,7 +63,15 @@ const taskSlice = createSlice({
   name: "tasks",
   initialState,
 
-  reducers: {},
+  reducers: {
+    clearTaskError: (state) => {
+      state.error = null;
+      state.isTaskCreating = false;
+      state.isTaskCreated = false;
+      state.isTaskCompleted = false;
+      state.isTaskDeleted = false;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -71,46 +83,54 @@ const taskSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getTasks.rejected, (state, action) => {
-        state.error = action.error.message;
         state.isLoading = false;
+        state.error = action;
       })
       .addCase(createTask.pending, (state) => {
-        state.isLoading = true;
+        state.isTaskCreating = true;
+        state.isTaskCreated = false
       })
       .addCase(createTask.fulfilled, (state, { payload }) => {
         state.tasks.push(payload);
-        state.isLoading = false;
+        state.isTaskCreating = false;
+        state.isTaskCreated = true;
       })
       .addCase(createTask.rejected, (state, action) => {
-        state.error = action.error.message;
-        state.isLoading = false;
+        state.isTaskCreating = false;
+        state.isTaskCreated = false;
+        state.error = action;
       })
       .addCase(deleteTask.pending, (state) => {
-        state.isLoading = true;
+        // state.isLoading = true;
+        state.error = null;
+        state.isTaskDeleted = false;
       })
       .addCase(deleteTask.fulfilled, (state, { payload }) => {
-        console.log(payload)
         state.tasks = state.tasks.filter((task) => task._id !== payload._id);
         state.isLoading = false;
+        state.error = null;
+        state.isTaskDeleted = true;
       })
       .addCase(deleteTask.rejected, (state, action) => {
-        state.error = action.error.message;
         state.isLoading = false;
+        state.error = action;
+        state.isTaskDeleted = false;
       })
       .addCase(updateTask.pending, (state) => {
-        // state.isLoading = true;
+        state.isTaskCompleted = false;
       })
       .addCase(updateTask.fulfilled, (state, { payload }) => {
         state.tasks = state.tasks.map((task) =>
           task._id === payload._id ? payload : task
         );
-        state.isLoading = false;
+        state.isTaskCompleted = true;
       })
       .addCase(updateTask.rejected, (state, action) => {
-        state.error = action.error.message;
-        state.isLoading = false;
+        state.isTaskCompleted = false;
+        state.error = action.payload;
       });
   },
 });
 
+export const { clearTaskError } = taskSlice.actions;
 export default taskSlice.reducer;
