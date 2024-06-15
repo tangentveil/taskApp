@@ -1,14 +1,12 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import "./App.css";
-import Auth from "./components/Auth/Auth";
-import Home from "./pages/Home";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-
-import { ToastContainer, toast } from "react-toastify";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { currentUser, logout } from "./features/Auth/authSlice";
+
+import Home from "./pages/Home";
+import Auth from "./components/Auth/Auth";
+import { currentUser } from "./features/Auth/authSlice";
 
 function App() {
   const isAuthenticated = useSelector((store) => store.auth?.token);
@@ -28,10 +26,8 @@ function App() {
     }
   }, [isAuthenticated, navigate]);
 
-  // console.log(isAuthenticated)
-
   return (
-    <main className="container">
+    <main>
       <ToastContainer position="top-center" />
       <Routes>
         <Route path="/" element={<Auth />} />

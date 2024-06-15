@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
 import { TextField, Button, Container, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import {
-  clearTaskError,
-  createTask,
-  getTasks,
-} from "../../features/Tasks/taskSlice";
-import { toast } from "react-toastify";
+
+import { clearTaskError, createTask } from "../../features/Tasks/taskSlice";
 
 const TaskForm = () => {
   const dispatch = useDispatch();
   const userId = useSelector((store) => store.auth?.user?._id);
-  const error = useSelector((store) => store.tasks?.error);
   const { isTaskCreating } = useSelector((store) => store.tasks);
 
   const [title, setTitle] = useState("");

@@ -4,9 +4,6 @@ export const createTask = async (req, res) => {
   const { title, description, status } = req.body;
   const id = req.userId;
 
-  // console.log(title, description, status)
-  // console.log(id)
-
   try {
     const task = await Task.create({ title, description, status, userId: id });
     res.status(200).json(task);

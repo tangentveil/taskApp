@@ -1,15 +1,19 @@
-import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { clearTaskError, deleteTask, statusChange, updateTask } from "../../features/Tasks/taskSlice";
-import { openModal } from "../../features/modal/modalSlice.js";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import { useDispatch } from "react-redux";
+
+import { Box, Checkbox, Container, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { toast } from "react-toastify";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+
+import {
+  clearTaskError,
+  deleteTask,
+  statusChange,
+  updateTask,
+} from "../../features/Tasks/taskSlice";
+import { openModal } from "../../features/modal/modalSlice.js";
 
 const Task = ({ _id, title, description, status }) => {
   const dispatch = useDispatch();
-  const {isTaskCompleted, isTaskDeleted} = useSelector((store) => store.tasks);
   const taskId = _id;
 
   const handleStatusChange = () => {
@@ -54,13 +58,19 @@ const Task = ({ _id, title, description, status }) => {
             color: status === "completed" ? "gray" : "inherit",
           }}
         >
-          <Typography variant="h6">{title}</Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              textTransform: "capitalize",
+            }}
+          >
+            {title}
+          </Typography>
         </Box>
         <Typography
           variant="body2"
           sx={{
             marginLeft: "auto",
-            marginRight: "0px",
             textTransform: "uppercase",
             color: status === "in progress" ? "orange" : "green",
           }}
@@ -68,19 +78,16 @@ const Task = ({ _id, title, description, status }) => {
           {status}
         </Typography>
       </Box>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        // mt={1}
-      >
+      <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography
           variant="body1"
           sx={{
             flexGrow: 1,
             textDecoration: status === "completed" ? "line-through" : "none",
             color: status === "completed" ? "gray" : "inherit",
-            marginLeft: 5,
+            marginLeft: "2.8rem",
+            textTransform: "capitalize",
+            maxWidth: "50%",
           }}
         >
           {description}
@@ -96,7 +103,7 @@ const Task = ({ _id, title, description, status }) => {
 
           <DeleteIcon
             onClick={() => {
-              dispatch(deleteTask(taskId))
+              dispatch(deleteTask(taskId));
               dispatch(clearTaskError());
             }}
             sx={{ color: "red", cursor: "pointer" }}

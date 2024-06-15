@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { Container, Typography, Box, Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { getTasks } from "../../features/Tasks/taskSlice";
 
 import Task from "./Task";
 
@@ -11,7 +11,6 @@ const TaskList = ({ tasks }) => {
   const [filter, setFilter] = useState("all");
   const loading = useSelector((store) => store.tasks?.isLoading);
 
-  // console.log(tasks)
   const filteredTasks = tasks.filter((task) => {
     if (filter === "all") return true;
 
@@ -81,15 +80,15 @@ const TaskList = ({ tasks }) => {
               alignItems: "center",
             }}
           >
-            <Typography variant="h4">
+            <Typography variant="h5">
               {filter === "all" && "Create Your First Task"}
             </Typography>
 
-            <Typography variant="h4">
+            <Typography variant="h5">
               {filter === "in progress" && "No Task In Progress"}
             </Typography>
 
-            <Typography variant="h4">
+            <Typography variant="h5">
               {filter === "completed" && "No Task Completed!"}
             </Typography>
           </Box>
@@ -102,7 +101,6 @@ const TaskList = ({ tasks }) => {
           sx={{
             overflowY: "auto",
             maxHeight: "480px",
-            // minHeight: "500px",
             "&::-webkit-scrollbar": {
               display: "none",
             },
