@@ -3,7 +3,11 @@ import Navbar from "../components/Layout/Navbar";
 import TaskForm from "../components/Tasks/TaskForm";
 import TaskList from "../components/Tasks/TaskList";
 
-import { clearTaskError, getTasks } from "../features/Tasks/taskSlice";
+import {
+  clearTaskError,
+  getTasks,
+  statusChange,
+} from "../features/Tasks/taskSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import EditFormModal from "../components/Layout/EditFormModal";
@@ -20,23 +24,24 @@ const Home = () => {
   const userId = useSelector((store) => store.auth?.user?._id);
   const isAuthenticated = useSelector((store) => store.auth?.token);
   const taskError = useSelector((store) => store.tasks.error);
-  const { isTaskCreated, isTaskCompleted, isTaskDeleted} = useSelector(
-    (store) => store.tasks
-  );
+  const { isTaskCreated, isTaskCompleted, isTaskDeleted, taskProgress } =
+    useSelector((store) => store.tasks);
 
   // console.log(taskError?.error.message);
 
   const tasks = useSelector((store) => store.tasks.tasks);
   const { isOpen } = useSelector((store) => store.modal);
-  // const tasks = [];
 
-  // console.log(userId)
+  // console.log(taskProgress)
 
   useEffect(() => {
     const token = isAuthenticated;
 
     if (token) {
       const decodeToken = jwtDecode(token);
+
+      console.log(decodeToken.exp * 1000);
+      console.log(new Date().getTime());
 
       if (decodeToken.exp * 1000 < new Date().getTime()) {
         dispatch(logout());
@@ -45,21 +50,27 @@ const Home = () => {
         dispatch(currentUser());
       }
     }
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated, navigate]);
 
   useEffect(() => {
     if (isTaskCreated) {
-      toast.success("Task Created");
+      toast.success("Task Created!");
     }
 
     if (isTaskCompleted) {
-      toast.success("Task Completed");
+      if (taskProgress === "completed") {
+        toast.success("Task Completed!");
+        dispatch(statusChange(null));
+      } else if (taskProgress === "in progress") {
+        toast.warn("Task In Progress...");
+        dispatch(statusChange(null));
+      }
     }
 
     if (isTaskDeleted) {
-      toast.success("Task Deleted");
+      toast.error("Task Deleted!");
     }
-  }, [isTaskCreated, isTaskCompleted, isTaskDeleted]);
+  }, [isTaskCreated, isTaskCompleted, isTaskDeleted, taskProgress, dispatch]);
 
   useEffect(() => {
     dispatch(currentUser());

@@ -8,7 +8,9 @@ const initialState = {
   isTaskCreating: false,
   isTaskCreated: false,
   isTaskCompleted: false,
+  isTaskInProgress: false,
   isTaskDeleted: false,
+  taskProgress: null,
 };
 
 export const getTasks = createAsyncThunk(
@@ -70,7 +72,11 @@ const taskSlice = createSlice({
       state.isTaskCreated = false;
       state.isTaskCompleted = false;
       state.isTaskDeleted = false;
+      state.taskProgress = "in progress";
     },
+    statusChange: (state, {payload}) => {
+      state.taskProgress = payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -132,5 +138,5 @@ const taskSlice = createSlice({
   },
 });
 
-export const { clearTaskError } = taskSlice.actions;
+export const { clearTaskError, statusChange } = taskSlice.actions;
 export default taskSlice.reducer;

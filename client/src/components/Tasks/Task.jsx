@@ -1,7 +1,7 @@
 import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearTaskError, deleteTask, updateTask } from "../../features/Tasks/taskSlice";
+import { clearTaskError, deleteTask, statusChange, updateTask } from "../../features/Tasks/taskSlice";
 import { openModal } from "../../features/modal/modalSlice.js";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,16 +11,6 @@ const Task = ({ _id, title, description, status }) => {
   const dispatch = useDispatch();
   const {isTaskCompleted, isTaskDeleted} = useSelector((store) => store.tasks);
   const taskId = _id;
-
-  // useEffect(() => {
-  //   // if (isTaskCompleted) {
-  //   //   toast.success("Task Completed");
-  //   // }
-
-  //   if (isTaskDeleted) {
-  //     toast.success("Task Deleted");
-  //   }
-  // }, [isTaskCompleted, isTaskDeleted]);
 
   const handleStatusChange = () => {
     dispatch(clearTaskError());
@@ -32,6 +22,8 @@ const Task = ({ _id, title, description, status }) => {
         updateData: { title, description, status: updatedStatus },
       })
     );
+
+    dispatch(statusChange(updatedStatus));
   };
 
   return (
