@@ -18,14 +18,17 @@ const Auth = () => {
 
   const isAuthenticated = useSelector((store) => store.auth?.token);
   const loading = useSelector((store) => store.auth.isLoading);
-  const error = useSelector((store) => store.auth.error);
+  const authError = useSelector((store) => store.auth?.error);
 
   useEffect(() => {
+    if (authError) {
+      toast.error(authError?.message);
+    }
 
     if (isAuthenticated) {
       navigate("/home");
     }
-  }, [isAuthenticated, navigate, dispatch]);
+  }, [authError, isAuthenticated, navigate, dispatch]);
 
   const handleSwitch = () => {
     setIsSignup(!isSignup);
@@ -55,10 +58,6 @@ const Auth = () => {
     } else {
       dispatch(login({ email, password }));
       dispatch(currentUser());
-    }
-
-    if (error) {
-      toast.error(error?.message);
     }
   };
 

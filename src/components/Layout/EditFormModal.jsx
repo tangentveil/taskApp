@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { Container, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../features/modal/modalSlice.js";
-import { getTasks, updateTask } from "../../features/Tasks/taskSlice.js";
+import { clearTaskError, getTasks, updateTask } from "../../features/Tasks/taskSlice.js";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -27,28 +27,15 @@ const EditFormModal = () => {
   const dispatch = useDispatch();
   const { isOpen, taskData } = useSelector((store) => store.modal);
 
-  // const userData = localStorage.getItem("user");
-  // const userId = JSON.parse(userData).user._id;
-
   const [title, setTitle] = useState(taskData?.title);
   const [description, setDescription] = useState(taskData?.description);
   const taskId = taskData._id;
-  const loading = useSelector((store) => store.tasks?.isLoading);
-
-  console.log(taskId)
+  const {isLoading} = useSelector((store) => store.tasks);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (title === taskData.title) {
-      toast.warn("Please Update the Title");
-      return;
-    }
-
-    if (description === taskData.description) {
-      toast.warn("Please Update the Description");
-      return;
-    }
+    dispatch(clearTaskError())
 
     if (!title) {
       toast.warn("Please Enter the Title");
@@ -61,7 +48,7 @@ const EditFormModal = () => {
     }
 
     dispatch(updateTask({ taskId, updateData: { title, description } }));
-     if(!loading) dispatch(closeModal());
+     if(!isLoading) dispatch(closeModal());
     // dispatch(getTasks(userId));
   };
 
@@ -112,7 +99,7 @@ const EditFormModal = () => {
                 size="large"
                 fullWidth
                 style={{ marginTop: "10px", borderRadius: "8px" }}
-                disabled={loading}
+                disabled={isLoading}
               >
                 Edit Task
               </Button>

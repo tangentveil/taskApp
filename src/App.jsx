@@ -19,20 +19,6 @@ function App() {
     dispatch(currentUser());
   }, [dispatch]);
 
-  useEffect(() => {
-    const token = isAuthenticated;
-
-    if (token) {
-      const decodeToken = jwtDecode(token);
-
-      if (decodeToken.exp * 1000 < new Date().getTime()) {
-        dispatch(logout());
-        navigate("/");
-      } else {
-        dispatch(currentUser());
-      }
-    }
-  }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated) {

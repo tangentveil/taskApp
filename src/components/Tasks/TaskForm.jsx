@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TextField, Button, Container, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { createTask, getTasks } from "../../features/Tasks/taskSlice";
+import {
+  clearTaskError,
+  createTask,
+  getTasks,
+} from "../../features/Tasks/taskSlice";
 import { toast } from "react-toastify";
 
 const TaskForm = () => {
   const dispatch = useDispatch();
   const userId = useSelector((store) => store.auth?.user?._id);
   const error = useSelector((store) => store.tasks?.error);
-  const loading = useSelector((store) => store.tasks?.isLoading);
-
-  // console.log(error)
+  const { isTaskCreating } = useSelector((store) => store.tasks);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,6 +21,8 @@ const TaskForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    dispatch(clearTaskError());
 
     if (!title) {
       toast.warn("Please Enter the Title");
@@ -30,13 +34,7 @@ const TaskForm = () => {
       return;
     }
 
-    // if(error === "Rejected"){
-    //   toast.warn("Promise Rejected")
-    //   return
-    // }
-
     dispatch(createTask({ userId, taskData: { title, description, status } }));
-    // dispatch(getTasks(userId));
   };
 
   return (
@@ -74,7 +72,7 @@ const TaskForm = () => {
               size="large"
               fullWidth
               style={{ marginTop: "10px", borderRadius: "8px" }}
-              disabled={loading}
+              disabled={isTaskCreating}
             >
               Add Task
             </Button>
