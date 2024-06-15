@@ -1,21 +1,18 @@
-import { Box, Container, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+
+import { Box, Container } from "@mui/material";
+
 import Navbar from "../components/Layout/Navbar";
 import TaskForm from "../components/Tasks/TaskForm";
 import TaskList from "../components/Tasks/TaskList";
-
-import {
-  clearTaskError,
-  getTasks,
-  statusChange,
-} from "../features/Tasks/taskSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import EditFormModal from "../components/Layout/EditFormModal";
+
+import { getTasks, statusChange } from "../features/Tasks/taskSlice";
 import { currentUser, logout } from "../features/Auth/authSlice";
-import { useNavigate } from "react-router-dom";
-import "./Home.css";
-import { toast } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,16 +20,9 @@ const Home = () => {
 
   const userId = useSelector((store) => store.auth?.user?._id);
   const isAuthenticated = useSelector((store) => store.auth?.token);
-  const taskError = useSelector((store) => store.tasks.error);
-  const { isTaskCreated, isTaskCompleted, isTaskDeleted, taskProgress } =
+  const { isTaskCreated, isTaskCompleted, isTaskDeleted, taskProgress, tasks } =
     useSelector((store) => store.tasks);
-
-  // console.log(taskError?.error.message);
-
-  const tasks = useSelector((store) => store.tasks.tasks);
   const { isOpen } = useSelector((store) => store.modal);
-
-  // console.log(taskProgress)
 
   useEffect(() => {
     const token = isAuthenticated;
@@ -86,10 +76,8 @@ const Home = () => {
     }
   }, [userId, isAuthenticated, navigate, dispatch]);
 
-  // console.log(tasks)
-
   return (
-    <div className="home-container">
+    <div>
       <Navbar />
       {isOpen && <EditFormModal />}
       <Container maxWidth="sm">
@@ -98,7 +86,7 @@ const Home = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          mt={5}
+          mt={3}
         ></Box>
 
         <Box>

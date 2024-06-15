@@ -1,15 +1,20 @@
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { Container, TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../../features/modal/modalSlice.js";
-import { clearTaskError, getTasks, updateTask } from "../../features/Tasks/taskSlice.js";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+
+import {
+  Container,
+  TextField,
+  Typography,
+  Button,
+  Fade,
+  Modal,
+  Box,
+  Backdrop,
+} from "@mui/material";
+
+import { closeModal } from "../../features/modal/modalSlice.js";
+import { clearTaskError, updateTask } from "../../features/Tasks/taskSlice.js";
 
 const style = {
   position: "absolute",
@@ -30,12 +35,12 @@ const EditFormModal = () => {
   const [title, setTitle] = useState(taskData?.title);
   const [description, setDescription] = useState(taskData?.description);
   const taskId = taskData._id;
-  const {isLoading} = useSelector((store) => store.tasks);
+  const { isLoading } = useSelector((store) => store.tasks);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(clearTaskError())
+    dispatch(clearTaskError());
 
     if (!title) {
       toast.warn("Please Enter the Title");
@@ -48,8 +53,7 @@ const EditFormModal = () => {
     }
 
     dispatch(updateTask({ taskId, updateData: { title, description } }));
-     if(!isLoading) dispatch(closeModal());
-    // dispatch(getTasks(userId));
+    dispatch(closeModal());
   };
 
   return (

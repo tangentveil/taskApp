@@ -1,11 +1,28 @@
-*{
-    margin: 0;
-    padding: 0;
-    font-family: monospace;
-    font-size: 15px;
-    text-transform: capitalize;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  font-size: 15px;
 }
 
-.container{
-    min-height: 100vh;
+.container {
+  min-height: 100vh;
+}
+
+@media screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    flex-direction: column;
+  }
+
+  .Toastify__toast {
+    width: 80%;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
 }
