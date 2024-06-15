@@ -11,7 +11,7 @@ export const createTask = async (req, res) => {
     const task = await Task.create({ title, description, status, userId: id });
     res.status(200).json(task);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: "Error in Creating Task..." });
   }
 };
 
@@ -22,7 +22,7 @@ export const getTasks = async (req, res) => {
     const task = await Task.find({ userId: id });
     res.status(200).json(task);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error in Getting Task..." });
   }
 };
 
@@ -39,7 +39,7 @@ export const updateTask = async (req, res) => {
 
     res.status(200).json(task);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: "Error in Updating Task..." });
   }
 };
 
@@ -50,6 +50,6 @@ export const deleteTask = async (req, res) => {
     const task = await Task.findByIdAndDelete(id);
     res.status(200).json(task);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error in Deleting Task..." });
   }
 };
