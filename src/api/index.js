@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
-  // baseURL: "https://taskapp-server-0b8q.onrender.com",
+  // baseURL: "http://localhost:5000",
+  baseURL: "https://taskapp-server-0b8q.onrender.com",
 });
    
 API.interceptors.request.use((req) => {
