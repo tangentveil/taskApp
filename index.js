@@ -36,5 +36,4 @@ mongoose
     console.log(err.message);
   });
 
-
-  export default app;
+export default app;
